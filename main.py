@@ -63,10 +63,38 @@ def results(language, risk_probability, method, no_infection_likelihood_today, n
 
 
 
+
+
 def main():
-	language = st.sidebar.radio('Language/Luuqada', ('English', 'Somali'))
+	st.sidebar.subheader('Language/Luuqada')
+	language = st.sidebar.radio('', ('English', 'Somali'))
 
 	if language == 'English':
+		st.title('COVID-19: A model for when you should close your office')
+		for i in range(3):
+			st.write(" ")
+
+		st.markdown("> ### A model to help you and your company make a decision on whether you should open your office or send everybody home amid the COVID-19 crisis.")
+
+		for i in range(2):
+			st.write(" ")
+
+		st.write("It was first developed by [Tomas Pueyo](https://medium.com/@tomaspueyo) as a complimentary tool to his viral article on Medium [Coronavirus: Why You Must Act Now](https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca), an impressive article that I strongly recommend you read. This is a python adaptation of the model, developed by [Abdurahman Shiine](https://github.com/abdurahman-shiine).")
+		st.write("It's based on how many COVID-19 cases are probably in your area, and the likelihood that at least one of your employees catches it.\nIt has lots of assumptions, but all the data necessary is [here](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), so you can play with the assumptions to adapt them to your situation.\nNote that only the necessary portions of the data were migrated to the [spread_share.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) file used for this model, so you might need to get some data from the original source if you need to recompute some specific numbers.")
+		st.write("The way to use this dashbourd is by filling in all the empty boxes, and select one of the options in each of the dropdown menus to apply the model to your case. The model is available in both English and Somali languages.")
+
+		st.markdown("<div align='center'><br>"
+                "<img src='https://img.shields.io/badge/MADE%20WITH-PYTHON%20-red?style=for-the-badge'"
+                "alt='API stability' height='25'/>"
+                "<img src='https://img.shields.io/badge/SERVED%20WITH-Heroku-blue?style=for-the-badge'"
+                "alt='API stability' height='25'/>"
+                "<img src='https://img.shields.io/badge/DASHBOARDING%20WITH-Streamlit-green?style=for-the-badge'"
+                "alt='API stability' height='25'/></div>", unsafe_allow_html=True)
+
+		for i in range(3):
+			st.write(" ")
+
+		st.header('🌀 The model')
 		num_employees = st.number_input('The number of employees you have')
 		risk_probability = st.number_input("Tolerable risk % (I'm ok with this probability that one or more of my employees has the coronavirus.)")
 		method = st.selectbox('Calculation method', ['', 'Deaths method (more reliable, use if there have been deaths in your area)', 'Cases method (not as reliable, making wild guesses on actual current cases in your area)'])
@@ -220,6 +248,31 @@ def main():
 
 
 	elif language == 'Somali':
+		st.title('COVID-19: Hab-xisaabineed aad ku ogaanayso goorta ay tahey in aad meheradaada xidho')
+		for i in range(3):
+			st.write(" ")
+
+		st.markdown("> ### Model kaa caawinaya adi iyo sharikadaadaba ka go'aan qaadashada goorma ayaa ay tahey in aad xidho xafiisyada oo shaqaalaha aad fasaxdo")
+
+		for i in range(2):
+			st.write(" ")
+
+		st.write("Waxa markii ugu horraysay curiyey model-kan [Tomas Pueyo](https://medium.com/@tomaspueyo) oo ugu talo-galay in ay isticmaalaan akhristayaashaa maqaalkiisii caanka noqdey ee uu ku shaaciyey wargayska Medium [Coronavirus: Why You Must Act Now](https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca), kaasi oo aad aan ugula talinayo cid kasta in ay akhirdo, (tarjumaadiisa somaliga ahna aad ka helaysiin [halkan]()). Kani waa model kii oo Python lagu qorey, waxana qorey [Abdurahman Shiine](https://github.com/abdurahman-shiine).")
+		st.write("Waxa uu model-ku ku salaysanyahey imisa xaaladood oo COVID_19 ah ayaa ay ubadantahey in ay ka jiraan aagaaga, iyo ixtimaalka in mid shaqaalahaaga ka mid ah uu ku qaadi karo xanuunkaas. Xisaabuhu waxa ay ku salaysan yihiin xog laga helayo [halkan](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), inteeda badanna ay tahey qiyaasid/dhadhawayn ee ayna ahayn wax la hubo 100%, sidaa darteed haddii aad ubaahato xogta aasaasiga ah wax waa aad ka beddeli kartaa si model-ka aad ugu salaysid duruufahaaga. FG. Xogta inteeda lagama maarmaanka ah kaliya ayaa lagu xareeyey file-ka [spread_share.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) ee uu xogta ka akhrinayo program-kani, sidaa darteed laga yaabaa in xogta qaybo ka mid ah aad kaliya ka hesho lifaaqa hore.")
+		st.write("Qaabka loo isticmaalayo program-kan waa in aad buuxiso bogosyada bannaan meelaha ka xulasho ubaahanna aad options-ka ku hor yaalla mid ka xulato, si aad model-ka ugu dabbaqdo xaaladaada. Labada luuqadood ee Somali iyo Ingiriisiba waa aad ku isticmaali kartaa program-kan.")
+
+		st.markdown("<div align='center'><br>"
+                "<img src='https://img.shields.io/badge/MADE%20WITH-PYTHON%20-red?style=for-the-badge'"
+                "alt='API stability' height='25'/>"
+                "<img src='https://img.shields.io/badge/SERVED%20WITH-Heroku-blue?style=for-the-badge'"
+                "alt='API stability' height='25'/>"
+                "<img src='https://img.shields.io/badge/DASHBOARDING%20WITH-Streamlit-green?style=for-the-badge'"
+                "alt='API stability' height='25'/></div>", unsafe_allow_html=True)
+
+		for i in range(3):
+			st.write(" ")
+
+		st.header('🌀 Model-ka')
 		num_employees = st.number_input('Tirada shaqaalahaaga')
 		risk_probability = st.number_input(" % khatarta aad xamili karto (Waxa aan xamili karaa ixtimaal ah in mid ama wax ka badan oo shaqaalahayga ka mid ahi ay boqolkiiba intaa xanuunku hayyo.)")
 		method = st.selectbox('Habka xisaabinta', ['', 'Habka tirada dhimashooyinka (waa la isku hallayn karaa, isticmaal haddii aagaaga wax dhimasho ahi ka dhacdey)', 'Habka tirada xaaladaha (Sida habka kale la iskuguma hallayn karo)'])
