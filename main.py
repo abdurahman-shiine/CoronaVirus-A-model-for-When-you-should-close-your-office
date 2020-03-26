@@ -2,38 +2,69 @@ import pandas as pd
 import streamlit as st
 
 
-def results(risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week):
-	st.write('   ')
-	st.title('Resutls')
-	st.write('   ')
+def results(language, risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week):
+	if language == 'English':
+		st.write('   ')
+		st.title('Resutls')
+		st.write('   ')
 
-	business_type = st.selectbox('Business type', ['', 'Individual business', 'Group of businesses'])
-	st.write('   ')
+		business_type = st.selectbox('Business type', ['', 'Individual business', 'Group of businesses'])
+		st.write('   ')
 
-	if business_type == 'Group of businesses':
-		num_group = st.number_input('Number of members in the group')
-		st.subheader('Likelihood that at least one company is infected in the group')
-		st.write('Likelihood that at least one company in the group is infected today', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_today) / 100, 2)) ** num_group)) * 100, 1)}%')
-		st.write('Likelihood that at least one company in the group will be infected tomorrow', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_tmrw) / 100, 2)) ** num_group)) * 100, 1)}%')
-		st.write('Likelihood that at least one company in the group will be infected in a week', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_next_week) / 100, 2)) ** num_group)) * 100, 1)}%')
+		if business_type == 'Group of businesses':
+			num_group = st.number_input('Number of members in the group')
+			st.subheader('Likelihood that at least one company is infected in the group')
+			st.write('Likelihood that at least one company in the group is infected today', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_today) / 100, 2)) ** num_group)) * 100, 1)}%')
+			st.write('Likelihood that at least one company in the group will be infected tomorrow', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_tmrw) / 100, 2)) ** num_group)) * 100, 1)}%')
+			st.write('Likelihood that at least one company in the group will be infected in a week', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_next_week) / 100, 2)) ** num_group)) * 100, 1)}%')
 
-	st.subheader('Likelihood that an average company is infected')
-	st.write('Probability that at least one of your employees is infected today: ', f'{round(1 - (no_infection_likelihood_today) / 100, 2) * 100}%')
-	st.write('Probability that at least one of your employees is infected tomorrow: ', f'{round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100}%')
-	st.write('Probability that at least one of your employees is infected in a week', f'{round(round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100, 1)}%')
+		st.subheader('Likelihood that an average company is infected')
+		st.write('Probability that at least one of your employees is infected today: ', f'{round(1 - (no_infection_likelihood_today) / 100, 2) * 100}%')
+		st.write('Probability that at least one of your employees is infected tomorrow: ', f'{round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100}%')
+		st.write('Probability that at least one of your employees is infected in a week', f'{round(round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100, 1)}%')
 
-	if (round(1 - (no_infection_likelihood_today) / 100, 2) * 100) > risk_probability:
-		st.error('Close immediately')
-	elif (round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100) > risk_probability:
-		st.warning('Close before tomorrow')
-	elif (round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100) > risk_probability:
-		st.info('Close within a week')
-	else:
-		st.success('No need to close this coming week')
+		if (round(1 - (no_infection_likelihood_today) / 100, 2) * 100) > risk_probability:
+			st.error('Close immediately')
+		elif (round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100) > risk_probability:
+			st.warning('Close before tomorrow')
+		elif (round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100) > risk_probability:
+			st.info('Close within a week')
+		else:
+			st.success('No need to close this coming week')
+
+	elif language == 'Somali':
+		st.write('   ')
+		st.title('Natiijada')
+		st.write('   ')
+
+		business_type = st.selectbox('Nooca meherada', ['', 'Meherad gooni isku-taaga', 'Meherado isku biirey'])
+		st.write('   ')
+
+		if business_type == 'Meherado isku biirey':
+			num_group = st.number_input('Tirada meheradaha isku biirey')
+			st.subheader('Ixtimaalka in mid ka mid ah meheradaha ugu yaraan uu xanuunku gaadhey')
+			st.write('Ixtimaalka in mid ka mid ah meheradaha ugu yaraan uu xanuunku gaadhey maanta', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_today) / 100, 2)) ** num_group)) * 100, 1)}%')
+			st.write('Ixtimaalka in mid ka mid ah meheradaha ugu yaraan uu xanuunku gaadhi doono barri', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_tmrw) / 100, 2)) ** num_group)) * 100, 1)}%')
+			st.write('Ixtimaalka in mid ka mid ah meheradaha ugu yaraan uu xanuunku gaadhi 7aad gudihii', f'{round((1 - ((1 - round(1 - (no_infection_likelihood_next_week) / 100, 2)) ** num_group)) * 100, 1)}%')
+
+		st.subheader('Ixtimaalka in mid ka mid ah shaqalaha uu xanuunku ku dhacay')
+		st.write('Ixtimaalka in mid ka mid ah shaqalaha uu xanuunku ku dhacay maanta: ', f'{round(1 - (no_infection_likelihood_today) / 100, 2) * 100}%')
+		st.write('Ixtimaalka in mid ka mid ah shaqalaha uu xanuunku ku dhici doono barri: ', f'{round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100}%')
+		st.write('Ixtimaalka in mid ka mid ah shaqalaha uu xanuunku ku dhici doono 7aad gudihii', f'{round(round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100, 1)}%')
+
+		if (round(1 - (no_infection_likelihood_today) / 100, 2) * 100) > risk_probability:
+			st.error('Sida ugu dhakhsiyaha badan uxidh meherada [imikadan]')
+		elif (round(1 - (no_infection_likelihood_tmrw) / 100, 2) * 100) > risk_probability:
+			st.warning('Barri kohor xidh meherada')
+		elif (round(1 - (no_infection_likelihood_next_week) / 100, 2) * 100) > risk_probability:
+			st.info('7aad gudihii ku xidh meherada')
+		else:
+			st.success('Uma baahnid inaad xidhid meherada 7aadkan soo socda')
+
 
 
 def main():
-	language = st.sidebar.radio('Language', ('English', 'Somali'))
+	language = st.sidebar.radio('Language/Luuqada', ('English', 'Somali'))
 
 	if language == 'English':
 		num_employees = st.number_input('The number of employees you have')
@@ -103,7 +134,7 @@ def main():
 				st.write('likelihood that none of your employees will have the coronavirus by tomorrow', f'{round(no_infection_likelihood_tmrw, 1)}%')
 				st.write('likelihood that none of your employees will have the coronavirus by next week', f'{round(no_infection_likelihood_next_week, 1)}%')
 
-				results(risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
+				results(language, risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
 
 			except ZeroDivisionError:
 				st.error('Number of people can\'t be zero')
@@ -173,7 +204,7 @@ def main():
 					st.write('likelihood that none of your employees will have the coronavirus by tomorrow', f'{round(no_infection_likelihood_tmrw, 3)}%')
 					st.write('likelihood that none of your employees will have the coronavirus by next week', f'{round(no_infection_likelihood_next_week, 3)}%')
 
-					results(risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
+					results(language, risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
 
 				except ZeroDivisionError:
 					st.error('Number of people can\'t be zero')
@@ -187,8 +218,162 @@ def main():
 				if community_spread == 'No':
 					st.info('Community spread: only "Yes" is built right now')
 
+
+	elif language == 'Somali':
+		num_employees = st.number_input('Tirada shaqaalahaaga')
+		risk_probability = st.number_input(" % khatarta aad xamili karto (Waxa aan xamili karaa ixtimaal ah in mid ama wax ka badan oo shaqaalahayga ka mid ahi ay boqolkiiba intaa xanuunku hayyo.)")
+		method = st.selectbox('Habka xisaabinta', ['', 'Habka tirada dhimashooyinka (waa la isku hallayn karaa, isticmaal haddii aagaaga wax dhimasho ahi ka dhacdey)', 'Habka tirada xaaladaha (Sida habka kale la iskuguma hallayn karo)'])
+
+
+		# Deaths method
+		if method == 'Habka tirada dhimashooyinka (waa la isku hallayn karaa, isticmaal haddii aagaaga wax dhimasho ahi ka dhacdey)':
+			total_deaths = st.number_input('Wadarta dhimashooyinka illaa maanta (Tirada xaaladaha ku dhintey COVID-19 aaga xafiisyada sharikadaadu ku yaallaan)')
+
+			st.markdown('### Natiijooyinka soo socdaa waxa ay ku salaysanyihiin:')
+			st.markdown('#### - Heer dhimasho = 0.87%')
+			st.markdown('#### - Muddada udhaxaysa qaadida xanuunka iyo ku dhimashadiisa = 17.3 maaalmood')
+			st.markdown('#### - Muddada ay ku libinlaabmayaan xaaladuhu = 6.2 maalmood')
+			st.markdown('#             ')
+
+			fatality_rate = 0.87 / 100
+			# How many cases were there some time ago that caused these deaths?
+			num_cases_caused_death = total_deaths / fatality_rate
+			# How many days did it take for the cases to become deaths? Based on 4 papers
+			days_from_infection = 17.3
+			# How many days does it take for cases to double?
+			doubling_time = 6.2
+			# How many times do cases double between the time of the cases that caused deaths and the deaths
+			num_times_cases_doubled = days_from_infection / doubling_time
+			# Estimation of true cases today in your area
+			num_true_cases = num_cases_caused_death * 2 ** num_times_cases_doubled
+
+			# The likelihood of true and new cases in your area tomorrow and in a week
+			likely_true_cases_tmrw = num_true_cases * 2 ** (1 / doubling_time)
+			likely_new_cases_tmrw = likely_true_cases_tmrw - num_true_cases
+			likely_true_cases_week = num_true_cases * 2 ** (7 / doubling_time)
+			likely_new_cases_week = likely_true_cases_week - num_true_cases
+
+			st.write('Tirada xaaladaha keenay dhimashada: ', round(num_cases_caused_death))
+			st.write('Tirada xaaladaha dhabta ah maanta: ', round(num_true_cases))
+			st.write('Tirada la filanayo in ay xaaladuhu barri gaadhaan: ', round(likely_true_cases_tmrw))
+			st.write('Tirada la filanayo in ay xaaladuhu 7aad ka bacdi gaadhaan: ', round(likely_true_cases_week))
+			st.write('Tirada xaaladaha la filanayo in ay barri soo kordhaan: ', round(likely_new_cases_tmrw))
+			st.write('Tirada xaaladaha la filanayo in ay 7aad ka bacdi soo kordhaan: ', round(likely_true_cases_week))
+
+
+			# ******* Estimation of the likelihood of a person getting infected *******
+			st.subheader('Qiyaasida ixtimaalka uu hal qof ku qaadi karo xanuunka')
+			num_people = st.number_input('Tirada dadka ku sugan aaga dhimashadu ka dhacdey (waa in ay >= 10,000)', value=10000, min_value=10000)
+
+			try:
+				if num_true_cases >= num_people:
+					no_infection_likelihood_today = 0.0
+					no_infection_likelihood_tmrw = 0.0
+					no_infection_likelihood_next_week = 0.0
+
+				else:
+					# Current infection rate
+					infection_rate_today = num_true_cases / num_people
+					# Expected infection rate the next day
+					infection_rate_tmrw = likely_true_cases_tmrw / num_people
+					# Expected infection rate a week later
+					infection_rate_next_week = likely_true_cases_week / num_people
+
+					no_infection_likelihood_today = ((1 - infection_rate_today) ** num_employees) * 100
+					no_infection_likelihood_tmrw = ((1 - infection_rate_tmrw) ** num_employees) * 100
+					no_infection_likelihood_next_week = ((1 - infection_rate_next_week) ** num_employees) * 100
+
+				st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin COVID-19 hadda', f'{round(no_infection_likelihood_today, 1)}%')
+				st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin doonin COVID-19 barri', f'{round(no_infection_likelihood_tmrw, 1)}%')
+				st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin doonin COVID-19 7aad ka bacdi', f'{round(no_infection_likelihood_next_week, 1)}%')
+
+				results(language, risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
+
+			except ZeroDivisionError:
+				st.error('Tirada dadka dagan aagu 0 ma noqon karto')
+
+
+		# Cases method
+		if method == 'Habka tirada xaaladaha (Sida habka kale la iskuguma hallayn karo)':
+			total_cases = st.number_input('Wadarta tirada xaaladaha ka jira aagaaga maanta ahaan')
+			testing_type = st.selectbox('Ma lawada baadhey dadka aaga oo dhan mise kaliya kuwa la kulmey qof buka?', ['', 'Kaliya kuwa la kulmey qof buka', 'Waa la wada baadhey'])
+			community_spread = st.selectbox('Bulshadu miyey isku faafinaysaa xanuunka?', ['', 'Haa', 'Maya'])
+
+			if testing_type == 'Kaliya kuwa la kulmey qof buka' and community_spread == 'Haa':
+				days = list(range(1, 32))
+				num_cases_reported = [12, 26, 43, 64, 103, 148, 215, 310, 383, 475, 624, 807, 1019, 1256, 1373, 1508, 2019, 2480, 2998, 3625, 4384, 5300, 6409, 7749, 9369, 11329, 13698, 16562, 20025, 24213, 29277, 35399]
+				cases_data = dict(zip(days, num_cases_reported))
+
+				df = pd.read_csv('spread_share.csv', header=None).iloc[0].tolist()
+
+				foreign_spread_share_data = []
+				for i, value in enumerate(df):
+					foreign_spread_share_data.append(float(value.strip('%')) / 100)
+
+				if total_cases <= 180:
+					foreign_spread_share = foreign_spread_share_data[int(total_cases) - 1]
+				else:
+					foreign_spread_share = 1 / 100
+
+				num_true_cases = total_cases / foreign_spread_share
+
+				starting_day_index = list(cases_data.keys())[list(cases_data.values()).index(min(filter(lambda x: x > num_true_cases, num_cases_reported)))]
+
+				likely_true_cases_tmrw = cases_data[starting_day_index]
+				likely_true_cases_week = cases_data[starting_day_index + 6]
+				likely_new_cases_tmrw = likely_true_cases_tmrw - num_true_cases
+				likely_new_cases_week = likely_true_cases_week - num_true_cases
+
+				st.write('Tirada xaaladaha dhabta ah maanta: ', round(num_true_cases))
+				st.write('Tirada la filanayo in ay xaaladuhu barri gaadhaan: ', round(likely_true_cases_tmrw))
+				st.write('Tirada la filanayo in ay xaaladuhu 7aad ka bacdi gaadhaan: ', round(likely_true_cases_week))
+				st.write('Tirada xaaladaha la filanayo in ay barri soo kordhaan: ', round(likely_new_cases_tmrw))
+				st.write('Tirada xaaladaha la filanayo in ay 7aad ka bacdi soo kordhaan: ', round(likely_new_cases_week))
+
+
+				# ******* Estimation of the likelihood of a person getting infected *******
+				st.subheader('Qiyaasida ixtimaalka uu hal qof ku qaadi karo xanuunka')
+				num_people = st.number_input('Tirada dadka ku sugan aaga xanuunku ku faafey (waa in ay >= 10,000)', value=10000, min_value=10000)
+
+				try:
+					if num_true_cases >= num_people:
+						no_infection_likelihood_today = 0.0
+						no_infection_likelihood_tmrw = 0.0
+						no_infection_likelihood_next_week = 0.0
+
+					else:
+						# Current infection rate
+						infection_rate_today = num_true_cases / num_people
+						# Expected infection rate the next day
+						infection_rate_tmrw = likely_true_cases_tmrw / num_people
+						# Expected infection rate a week later
+						infection_rate_next_week = likely_true_cases_week / num_people
+
+						no_infection_likelihood_today = ((1 - infection_rate_today) ** num_employees) * 100
+						no_infection_likelihood_tmrw = ((1 - infection_rate_tmrw) ** num_employees) * 100
+						no_infection_likelihood_next_week = ((1 - infection_rate_next_week) ** num_employees) * 100
+
+					st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin COVID-19 hadda', f'{round(no_infection_likelihood_today, 3)}%')
+					st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin doonin COVID-19 barri', f'{round(no_infection_likelihood_tmrw, 3)}%')
+					st.write('Ixtimaalka in shaqaalahaaga midna uuna qabin doonin COVID-19 7aad ka bacdi', f'{round(no_infection_likelihood_next_week, 3)}%')
+
+					results(language, risk_probability, method, no_infection_likelihood_today, no_infection_likelihood_tmrw, no_infection_likelihood_next_week)
+
+				except ZeroDivisionError:
+					st.error('Tirada dadka dagan aagu 0 ma noqon karto')
+
+			elif testing_type == '' or community_spread == '':
+				pass
+
+			else:
+				if testing_type == 'Waa la wada baadhey':
+					st.info('Nooca baadhitaanka: kaliya hab-xisaabineedka "Kaliya kuwa la kulmey qof buka" ayaa la sameeyey hadda')
+				if community_spread == 'Maya':
+					st.info('Isku-faafinta bulshada: kaliya "Haa" ayaa la sameeyey hadda')
+
 	else:
 		pass
+
 
 
 if __name__ == "__main__":
