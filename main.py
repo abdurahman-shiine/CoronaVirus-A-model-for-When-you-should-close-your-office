@@ -80,7 +80,7 @@ def main():
 			st.write(" ")
 
 		st.write("It was first developed by [Tomas Pueyo](https://medium.com/@tomaspueyo) as a complimentary tool to his viral article on Medium [Coronavirus: Why You Must Act Now](https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca), an impressive article that I strongly recommend you read. This is a python adaptation of the model, developed by [Abdurahman Shiine](https://github.com/abdurahman-shiine).")
-		st.write("It's based on how many COVID-19 cases are probably in your area, and the likelihood that at least one of your employees catches it.\nIt has lots of assumptions, but all the data necessary is [here](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), so you can play with the assumptions to adapt them to your situation.\nNote that only the necessary portions of the data were migrated to the [spread_share.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) file used for this model, so you might need to get some data from the original source if you need to recompute some specific numbers.")
+		st.write("It's based on how many COVID-19 cases are probably in your area, and the likelihood that at least one of your employees catches it.\nIt has lots of assumptions, but all the data necessary is [here](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), so you can play with the assumptions to adapt them to your situation.\nNote that only the necessary portions of the data were migrated to the [model_data.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) file used for this model, so you might need to get some data from the original source if you need to recompute some specific parameters.")
 		st.write("The way to use this dashbourd is by filling in all the empty boxes, and select one of the options in each of the dropdown menus to apply the model to your case. The model is available in both English and Somali languages.")
 
 		st.markdown("<div align='center'><br>"
@@ -175,15 +175,13 @@ def main():
 			community_spread = st.selectbox('Is community spread happening?', ['', 'Yes', 'No'])
 
 			if testing_type == 'Only if connected to a case' and community_spread == 'Yes':
-				days = list(range(1, 32))
-				num_cases_reported = [12, 26, 43, 64, 103, 148, 215, 310, 383, 475, 624, 807, 1019, 1256, 1373, 1508, 2019, 2480, 2998, 3625, 4384, 5300, 6409, 7749, 9369, 11329, 13698, 16562, 20025, 24213, 29277, 35399]
-				cases_data = dict(zip(days, num_cases_reported))
+				df = pd.read_csv('model_data.csv', header=None, thousands=',').transpose()
+				new_header = df.iloc[0]
+				df = df[1:]
+				df.columns = new_header
+				df.reset_index(inplace=True)
 
-				df = pd.read_csv('spread_share.csv', header=None).iloc[0].tolist()
-
-				foreign_spread_share_data = []
-				for i, value in enumerate(df):
-					foreign_spread_share_data.append(float(value.strip('%')) / 100)
+				foreign_spread_share_data = df['Share China'].apply(lambda x: float(x.strip('%')) / 100)
 
 				if total_cases <= 180:
 					foreign_spread_share = foreign_spread_share_data[int(total_cases) - 1]
@@ -191,11 +189,12 @@ def main():
 					foreign_spread_share = 1 / 100
 
 				num_true_cases = total_cases / foreign_spread_share
+				cases_data = df['Typical contagion as a blend of other countries (US UK DE FR ES IT IR SK JP CH) (you can insert your own #s here)'][:32]
+				cases_data = cases_data.str.replace(',', '').astype(float)
+				starting_day_index = min(filter(lambda x: x > num_true_cases, cases_data.tolist()))
 
-				starting_day_index = list(cases_data.keys())[list(cases_data.values()).index(min(filter(lambda x: x > num_true_cases, num_cases_reported)))]
-
-				likely_true_cases_tmrw = cases_data[starting_day_index]
-				likely_true_cases_week = cases_data[starting_day_index + 6]
+				likely_true_cases_tmrw = cases_data[cases_data[ cases_data == starting_day_index].index[0]]
+				likely_true_cases_week = cases_data[cases_data[ cases_data == starting_day_index].index[0] + 6]
 				likely_new_cases_tmrw = likely_true_cases_tmrw - num_true_cases
 				likely_new_cases_week = likely_true_cases_week - num_true_cases
 
@@ -257,8 +256,8 @@ def main():
 		for i in range(2):
 			st.write(" ")
 
-		st.write("Waxa markii ugu horraysay curiyey model-kan [Tomas Pueyo](https://medium.com/@tomaspueyo) oo ugu talo-galay in ay isticmaalaan akhristayaashaa maqaalkiisii caanka noqdey ee uu ku shaaciyey wargayska Medium [Coronavirus: Why You Must Act Now](https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca), kaasi oo aad aan ugula talinayo cid kasta in ay akhirdo, (tarjumaadiisa somaliga ahna aad ka helaysiin [halkan]()). Kani waa model kii oo Python lagu qorey, waxana qorey [Abdurahman Shiine](https://github.com/abdurahman-shiine).")
-		st.write("Waxa uu model-ku ku salaysanyahey imisa xaaladood oo COVID_19 ah ayaa ay ubadantahey in ay ka jiraan aagaaga, iyo ixtimaalka in mid shaqaalahaaga ka mid ah uu ku qaadi karo xanuunkaas. Xisaabuhu waxa ay ku salaysan yihiin xog laga helayo [halkan](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), inteeda badanna ay tahey qiyaasid/dhadhawayn ee ayna ahayn wax la hubo 100%, sidaa darteed haddii aad ubaahato xogta aasaasiga ah wax waa aad ka beddeli kartaa si model-ka aad ugu salaysid duruufahaaga. FG. Xogta inteeda lagama maarmaanka ah kaliya ayaa lagu xareeyey file-ka [spread_share.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) ee uu xogta ka akhrinayo program-kani, sidaa darteed laga yaabaa in xogta qaybo ka mid ah aad kaliya ka hesho lifaaqa hore.")
+		st.write("Waxa markii ugu horraysay curiyey model-kan [Tomas Pueyo](https://medium.com/@tomaspueyo) oo ugu talo-galay in ay isticmaalaan akhristayaashaa maqaalkiisii caanka noqdey ee uu ku shaaciyey wargayska Medium [Coronavirus: Why You Must Act Now](https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca), kaasi oo aad aan ugula talinayo cid kasta in ay akhirdo, (tarjumaadiisa somaliga ahna aad ka helaysiin [halkan](https://www.facebook.com/notes/abdurahman-shiine/-covid-19-maxay-waajib-kuugu-tahey-inaad-maanta-fal-qaaddo/2941779562584988/)). Kani waa model kii oo Python lagu qorey, waxana qorey [Abdurahman Shiine](https://github.com/abdurahman-shiine).")
+		st.write("Waxa uu model-ku ku salaysanyahey imisa xaaladood oo COVID_19 ah ayaa ay ubadantahey in ay ka jiraan aagaaga, iyo ixtimaalka in mid shaqaalahaaga ka mid ah uu ku qaadi karo xanuunkaas. Xisaabuhu waxa ay ku salaysan yihiin xog laga helayo [halkan](https://docs.google.com/spreadsheets/u/1/d/17YyCmjb2Z2QwMiRRwAb7W0vQoEAiL9Co0ARsl03dSlw/copy?usp=sharing), inteeda badanna ay tahey qiyaasid/dhadhawayn ee ayna ahayn wax la hubo 100%, sidaa darteed haddii aad ubaahato xogta aasaasiga ah wax waa aad ka beddeli kartaa si model-ka aad ugu salaysid duruufahaaga. FG. Xogta inteeda lagama maarmaanka ah kaliya ayaa lagu xareeyey file-ka [model_data.csv](https://github.com/abdurahman-shiine/CoronaVirus-A-model-for-When-you-should-close-your-office) ee uu xogta ka akhrinayo program-kani, sidaa darteed laga yaabaa in xogta qaybo ka mid ah aad kaliya ka hesho lifaaqa hore.")
 		st.write("Qaabka loo isticmaalayo program-kan waa in aad buuxiso bogosyada bannaan meelaha ka xulasho ubaahanna aad options-ka ku hor yaalla mid ka xulato, si aad model-ka ugu dabbaqdo xaaladaada. Labada luuqadood ee Somali iyo Ingiriisiba waa aad ku isticmaali kartaa program-kan.")
 
 		st.markdown("<div align='center'><br>"
@@ -353,15 +352,13 @@ def main():
 			community_spread = st.selectbox('Bulshadu miyey isku faafinaysaa xanuunka?', ['', 'Haa', 'Maya'])
 
 			if testing_type == 'Kaliya kuwa la kulmey qof buka' and community_spread == 'Haa':
-				days = list(range(1, 32))
-				num_cases_reported = [12, 26, 43, 64, 103, 148, 215, 310, 383, 475, 624, 807, 1019, 1256, 1373, 1508, 2019, 2480, 2998, 3625, 4384, 5300, 6409, 7749, 9369, 11329, 13698, 16562, 20025, 24213, 29277, 35399]
-				cases_data = dict(zip(days, num_cases_reported))
+				df = pd.read_csv('model_data.csv', header=None, thousands=',').transpose()
+				new_header = df.iloc[0]
+				df = df[1:]
+				df.columns = new_header
+				df.reset_index(inplace=True)
 
-				df = pd.read_csv('spread_share.csv', header=None).iloc[0].tolist()
-
-				foreign_spread_share_data = []
-				for i, value in enumerate(df):
-					foreign_spread_share_data.append(float(value.strip('%')) / 100)
+				foreign_spread_share_data = df['Share China'].apply(lambda x: float(x.strip('%')) / 100)
 
 				if total_cases <= 180:
 					foreign_spread_share = foreign_spread_share_data[int(total_cases) - 1]
@@ -369,11 +366,12 @@ def main():
 					foreign_spread_share = 1 / 100
 
 				num_true_cases = total_cases / foreign_spread_share
+				cases_data = df['Typical contagion as a blend of other countries (US UK DE FR ES IT IR SK JP CH) (you can insert your own #s here)'][:32]
+				cases_data = cases_data.str.replace(',', '').astype(float)
+				starting_day_index = min(filter(lambda x: x > num_true_cases, cases_data.tolist()))
 
-				starting_day_index = list(cases_data.keys())[list(cases_data.values()).index(min(filter(lambda x: x > num_true_cases, num_cases_reported)))]
-
-				likely_true_cases_tmrw = cases_data[starting_day_index]
-				likely_true_cases_week = cases_data[starting_day_index + 6]
+				likely_true_cases_tmrw = cases_data[cases_data[ cases_data == starting_day_index].index[0]]
+				likely_true_cases_week = cases_data[cases_data[ cases_data == starting_day_index].index[0] + 6]
 				likely_new_cases_tmrw = likely_true_cases_tmrw - num_true_cases
 				likely_new_cases_week = likely_true_cases_week - num_true_cases
 
